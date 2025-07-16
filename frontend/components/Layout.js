@@ -2,12 +2,11 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useAuth } from './auth/AuthProvider'
-import Image from 'next/image'
+import Logo from './Logo'
 
 export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
-  const [logoError, setLogoError] = useState(false)
   const router = useRouter()
   const { userProfile, logout, isAdmin, isManager } = useAuth()
 
@@ -29,26 +28,12 @@ export default function Layout({ children }) {
   }
 
   const LogoComponent = ({ isMobile = false }) => {
-    if (logoError) {
-      return (
-        <div className={`${isMobile ? 'h-8 px-3' : 'h-12 px-4'} flex items-center justify-center bg-teal-600 text-white rounded`}>
-          <span className={`${isMobile ? 'text-sm' : 'text-lg'} font-bold`}>BGFA</span>
-        </div>
-      );
-    }
-
     return (
       <div className="flex items-center">
-        <Image
-          src="/logo.svg"
-          alt="Bridging Gaps Fostering Agency"
+        <Logo 
+          className={isMobile ? "h-8 w-auto max-w-48" : "h-12 w-auto max-w-56"}
           width={isMobile ? 160 : 200}
           height={isMobile ? 48 : 60}
-          className={isMobile ? "h-8 w-auto max-w-48" : "h-12 w-auto max-w-56"}
-          style={{ height: isMobile ? '32px' : '48px', width: 'auto' }}
-          priority
-          unoptimized
-          onError={() => setLogoError(true)}
         />
       </div>
     );
