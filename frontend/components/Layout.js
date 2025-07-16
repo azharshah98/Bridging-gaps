@@ -6,6 +6,7 @@ import { useAuth } from './auth/AuthProvider'
 export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [logoError, setLogoError] = useState(false)
   const router = useRouter()
   const { userProfile, logout, isAdmin, isManager } = useAuth()
 
@@ -26,6 +27,23 @@ export default function Layout({ children }) {
     }
   }
 
+  const LogoComponent = ({ isMobile = false }) => (
+    <div className="flex items-center">
+      {!logoError ? (
+        <img 
+          src="/Logo-Vectorized-Basic.png"
+          alt="Bridging Gaps Fostering Agency" 
+          className={isMobile ? "h-8 w-auto max-w-48" : "h-12 w-auto max-w-56"}
+          onError={() => setLogoError(true)}
+        />
+      ) : (
+        <div className={`${isMobile ? 'h-8 px-3' : 'h-12 px-4'} flex items-center justify-center bg-teal-600 text-white rounded`}>
+          <span className={`${isMobile ? 'text-sm' : 'text-lg'} font-bold`}>BGFA</span>
+        </div>
+      )}
+    </div>
+  )
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile sidebar */}
@@ -33,23 +51,7 @@ export default function Layout({ children }) {
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
         <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-white shadow-xl">
           <div className="flex h-16 items-center justify-between px-4 border-b border-gray-200">
-            <div className="flex items-center">
-              <img 
-                src="/Logo-Vectorized-Basic.png"
-                alt="Bridging Gaps Fostering Agency" 
-                className="h-8 w-auto max-w-48"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                  e.target.nextSibling.style.display = 'block';
-                }}
-              />
-              <span 
-                className="text-lg font-bold text-teal-600 hidden"
-                style={{ display: 'none' }}
-              >
-                BGFA
-              </span>
-            </div>
+            <LogoComponent isMobile={true} />
             <button
               type="button"
               className="text-gray-400 hover:text-gray-600"
@@ -109,21 +111,7 @@ export default function Layout({ children }) {
       <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
         <div className="flex flex-col flex-grow bg-white border-r border-gray-200 overflow-y-auto">
           <div className="flex items-center flex-shrink-0 px-4 py-4 border-b border-gray-200">
-            <img 
-              src="/Logo-Vectorized-Basic.png"
-              alt="Bridging Gaps Fostering Agency" 
-              className="h-12 w-auto max-w-56"
-              onError={(e) => {
-                e.target.style.display = 'none';
-                e.target.nextSibling.style.display = 'block';
-              }}
-            />
-            <span 
-              className="text-xl font-bold text-teal-600 hidden"
-              style={{ display: 'none' }}
-            >
-              BGFA
-            </span>
+            <LogoComponent isMobile={false} />
           </div>
           <nav className="flex-1 px-4 py-4 space-y-1">
             {navigation.map((item) => {

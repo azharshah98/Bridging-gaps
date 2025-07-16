@@ -7,6 +7,7 @@ export default function LoginForm() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [logoError, setLogoError] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,12 +31,23 @@ export default function LoginForm() {
         <div className="text-center">
           {/* Bridging Gaps Logo */}
           <div className="flex justify-center mb-12 mt-8">
-            <img 
-              src="/Logo-Vectorized-Basic.png"
-              alt="Bridging Gaps Fostering Agency" 
-              className="h-32 w-auto max-w-sm"
-              style={{ maxHeight: '128px' }}
-            />
+            {!logoError ? (
+              <img 
+                src="/Logo-Vectorized-Basic.png"
+                alt="Bridging Gaps Fostering Agency" 
+                className="h-32 w-auto max-w-sm"
+                style={{ maxHeight: '128px' }}
+                onError={() => setLogoError(true)}
+              />
+            ) : (
+              <div className="h-32 flex items-center justify-center bg-teal-600 text-white rounded-lg px-8">
+                <div className="text-center">
+                  <h1 className="text-2xl font-bold">BGFA</h1>
+                  <p className="text-sm text-teal-100">Bridging Gaps</p>
+                  <p className="text-sm text-teal-100">Fostering Agency</p>
+                </div>
+              </div>
+            )}
           </div>
           
           <h2 className="mt-6 text-center text-2xl font-bold text-gray-900">
