@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Firebase Test</title>
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+        import { getFirestore, collection, addDoc, getDocs } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
+        import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDykPup22rjrnfgDak2diZtI9jBYsISi3w",
+            authDomain: "carer-match.firebaseapp.com",
+            projectId: "carer-match",
+            storageBucket: "carer-match.firebasestorage.app",
+            messagingSenderId: "922161902973",
+            appId: "1:922161902973:web:aefae248a86fe92348c814",
+            measurementId: "G-19236LK34J"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Test connection
+        console.log('Firebase initialized');
+        console.log('Auth:', auth);
+        console.log('DB:', db);
+
+        // Listen for auth state changes
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log('User is signed in:', user.uid);
+                document.getElementById('auth-status').textContent = 'Authenticated: ' + user.uid;
+                testFirestore();
+            } else {
+                console.log('User is signed out');
+                document.getElementById('auth-status').textContent = 'Not authenticated';
+            }
+        });
+
+        // Test Firestore
+        async function testFirestore() {
+            try {
+                console.log('Testing Firestore connection...');
+                
+                // Try to read carers collection
+                const querySnapshot = await getDocs(collection(db, 'carers'));
+                console.log('Carers collection size:', querySnapshot.size);
+                document.getElementById('firestore-status').textContent = 'Firestore connected. Carers: ' + querySnapshot.size;
+                
+                // Try to create a test carer
+                const testCarer = {
+                    name: "Test Carer",
+                    email: "test@example.com",
+                    phone: "123-456-7890",
+                    address: {
+                        street: "123 Test St",
+                        city: "Test City",
+                        postcode: "12345"
+                    },
+                    preferences: {
+                        specialNeeds: false,
+                        behavioralSupport: true,
+                        ageRangeMin: 0,
+                        ageRangeMax: 18,
+                        maxChildren: 2,
+                        petFriendly: true
+                    },
+                    experience: {
+                        level: "intermediate",
+                        dateOfBirth: "1980-01-01"
+                    },
+                    availability: {
+                        status: "active"
+                    },
+                    status: "active",
+                    notes: "Test carer for Firebase connection"
+                };
+                
+                const docRef = await addDoc(collection(db, 'carers'), testCarer);
+                console.log('Test carer created with ID:', docRef.id);
+                document.getElementById('create-status').textContent = 'Test carer created: ' + docRef.id;
+                
+            } catch (error) {
+                console.error('Firestore error:', error);
+                document.getElementById('firestore-status').textContent = 'Firestore error: ' + error.message;
+            }
+        }
+
+        // Sign in anonymously for testing
+        window.signInTest = async function() {
+            try {
+                await signInAnonymously(auth);
+                console.log('Signed in anonymously');
+            } catch (error) {
+                console.error('Sign in error:', error);
+                document.getElementById('auth-status').textContent = 'Sign in error: ' + error.message;
+            }
+        };
+    </script>
+</head>
+<body>
+    <h1>Firebase Connection Test</h1>
+    <p>Auth Status: <span id="auth-status">Checking...</span></p>
+    <p>Firestore Status: <span id="firestore-status">Waiting for auth...</span></p>
+    <p>Create Status: <span id="create-status">Waiting...</span></p>
+    
+    <button onclick="signInTest()">Sign In Anonymously</button>
+    
+    <div style="margin-top: 20px;">
+        <p>Check the browser console for detailed logs.</p>
+    </div>
+</body>
+</html> 

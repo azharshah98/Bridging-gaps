@@ -1,0 +1,51 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper function to check if user is authenticated staff
+    function isStaff() {
+      return request.auth != null && 
+             request.auth.uid != null &&
+             firestore.exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+             firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.active == true;
+    }
+    
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return isStaff() && 
+             firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Referral attachments - only staff can read, system can write
+    match /referral-attachments/{referralId}/{fileName} {
+      allow read: if isStaff();
+      allow write: if isStaff() && 
+                      request.resource.size < 10 * 1024 * 1024 && // 10MB limit
+                      request.resource.contentType.matches('application/pdf') &&
+                      fileName.matches('.*\\.pdf$');
+      allow delete: if isAdmin();
+    }
+    
+    // Temporary uploads for processing
+    match /temp-uploads/{uploadId} {
+      allow read, write: if isStaff() && 
+                           request.resource.size < 10 * 1024 * 1024; // 10MB limit
+      allow delete: if isStaff();
+    }
+    
+    // User profile images (if needed in future)
+    match /user-profiles/{userId}/{fileName} {
+      allow read: if isStaff();
+      allow write: if isStaff() && 
+                      request.auth.uid == userId &&
+                      request.resource.size < 5 * 1024 * 1024 && // 5MB limit
+                      request.resource.contentType.matches('image/.*');
+      allow delete: if isStaff() && request.auth.uid == userId;
+    }
+    
+    // Deny all other access
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+} 
