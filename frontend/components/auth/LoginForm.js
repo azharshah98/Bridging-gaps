@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
-import Image from 'next/image';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -19,26 +18,9 @@ export default function LoginForm() {
       // User will be redirected by AuthProvider
     } catch (error) {
       console.error('Login error:', error);
-      setError(getErrorMessage(error.code));
+      setError('Invalid email or password');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const getErrorMessage = (errorCode) => {
-    switch (errorCode) {
-      case 'auth/user-not-found':
-        return 'No account found with this email address.';
-      case 'auth/wrong-password':
-        return 'Incorrect password.';
-      case 'auth/invalid-email':
-        return 'Invalid email address.';
-      case 'auth/user-disabled':
-        return 'This account has been disabled.';
-      case 'auth/too-many-requests':
-        return 'Too many failed attempts. Please try again later.';
-      default:
-        return 'Login failed. Please check your credentials and try again.';
     }
   };
 
@@ -48,12 +30,11 @@ export default function LoginForm() {
         <div className="text-center">
           {/* Bridging Gaps Logo */}
           <div className="flex justify-center mb-12 mt-8">
-            <Image 
+            <img 
               src="/Logo-Vectorized-Basic.png"
               alt="Bridging Gaps Fostering Agency" 
-              width={400}
-              height={120}
-              className="h-32 w-auto"
+              className="h-32 w-auto max-w-sm"
+              style={{ maxHeight: '128px' }}
             />
           </div>
           
@@ -66,9 +47,9 @@ export default function LoginForm() {
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
+          <div className="space-y-4">
             <div>
-              <label htmlFor="email" className="sr-only">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email address
               </label>
               <input
@@ -79,12 +60,13 @@ export default function LoginForm() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 focus:z-10 sm:text-sm"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-teal-500 focus:border-teal-500"
                 placeholder="Email address"
               />
             </div>
+
             <div>
-              <label htmlFor="password" className="sr-only">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
               </label>
               <input
@@ -95,14 +77,14 @@ export default function LoginForm() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 focus:z-10 sm:text-sm"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-teal-500 focus:border-teal-500"
                 placeholder="Password"
               />
             </div>
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-md p-4">
+            <div className="bg-red-50 border border-red-200 rounded-md p-3">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -110,7 +92,7 @@ export default function LoginForm() {
                   </svg>
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm text-red-700">{error}</p>
+                  <p className="text-sm text-red-800">{error}</p>
                 </div>
               </div>
             </div>
@@ -124,10 +106,7 @@ export default function LoginForm() {
             >
               {loading ? (
                 <div className="flex items-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                   Signing in...
                 </div>
               ) : (
