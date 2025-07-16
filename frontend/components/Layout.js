@@ -40,7 +40,7 @@ export default function Layout({ children }) {
     return (
       <div className="flex items-center">
         <Image
-          src="/Logo-Vectorized-Basic.png"
+          src="/logo.svg"
           alt="Bridging Gaps Fostering Agency"
           width={isMobile ? 160 : 200}
           height={isMobile ? 48 : 60}

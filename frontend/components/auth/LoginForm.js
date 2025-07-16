@@ -42,7 +42,7 @@ export default function LoginForm() {
     return (
       <div className="relative">
         <Image
-          src="/Logo-Vectorized-Basic.png"
+          src="/logo.svg"
           alt="Bridging Gaps Fostering Agency"
           width={400}
           height={120}
