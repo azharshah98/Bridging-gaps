@@ -1,133 +1,157 @@
-# Foster Care Agency Web App
+# Foster Care Matching System
 
-A streamlined web application for foster care agencies focused on core matching functionality between carers and child referrals.
+A comprehensive web application for matching foster carers with children in need of care, built with React/Next.js and Firebase.
 
-## 🚀 Features
+## Features
 
-- **Foster Carer Management**: Store and manage detailed carer profiles with preferences and capabilities
-- **Automated Referral Processing**: Receive and process IFA referral forms via email with PDF parsing
-- **Intelligent Matching**: Algorithm-based matching system that scores carers against referral requirements
-- **Carer Assignment**: Assign matched carers to referrals with tracking
-- **Daily Summary**: View daily referrals summary and key statistics
-- **Secure Dashboard**: React-based dashboard for agency staff with role-based access
-- **Audit Logging**: Complete audit trail of all actions and status changes
+- **Intelligent Matching Algorithm**: Automatically matches carers with children based on multiple criteria
+- **Carer Management**: Complete CRUD operations for foster carer profiles
+- **Referral Processing**: Streamlined referral intake and processing
+- **Real-time Updates**: Live updates using Firebase Firestore
+- **Secure Authentication**: Firebase Authentication with role-based access
+- **Responsive Design**: Mobile-first design with Tailwind CSS
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-- **Backend**: Firebase Cloud Functions (Node.js/TypeScript)
-- **Database**: Firestore (NoSQL)
-- **Authentication**: Firebase Auth
-- **Storage**: Firebase Storage
-- **Frontend**: React with Next.js and Tailwind CSS
-- **Email Processing**: SendGrid/Mailgun integration
-- **PDF Processing**: PDF-parse library
+- **Frontend**: React, Next.js, Tailwind CSS
+- **Backend**: Firebase (Firestore, Authentication, Cloud Functions)
+- **Deployment**: Vercel (Frontend), Firebase (Backend)
 
-## 📁 Project Structure
-
-```
-foster-care-agency/
-├── functions/              # Firebase Cloud Functions
-│   ├── src/
-│   │   ├── index.ts       # Main functions entry point
-│   │   ├── matching/      # Matching algorithm
-│   │   ├── email/         # Email processing
-│   │   └── types/         # TypeScript definitions
-│   ├── package.json
-│   └── tsconfig.json
-├── frontend/              # React application
-│   ├── src/
-│   │   ├── components/    # React components
-│   │   ├── pages/         # Page components
-│   │   ├── hooks/         # Custom React hooks
-│   │   ├── services/      # Firebase services
-│   │   └── types/         # TypeScript definitions
-│   └── package.json
-├── firestore.rules        # Firestore security rules
-├── storage.rules          # Storage security rules
-├── firebase.json          # Firebase configuration
-└── package.json           # Root package.json
-```
-
-## 🔧 Setup Instructions
+## Quick Start
 
 ### Prerequisites
-- Node.js 18+
-- Firebase CLI
-- Firebase project with Firestore, Auth, Storage, and Functions enabled
 
-### Installation
+- Node.js 18+ 
+- npm or yarn
+- Firebase account
+- Vercel account (for deployment)
 
-1. **Clone and install dependencies**
+### Local Development
+
+1. **Clone the repository**
    ```bash
+   git clone https://github.com/azharshah98/Bridging-gaps.git
+   cd Bridging-gaps
+   ```
+
+2. **Install dependencies**
+   ```bash
+   cd frontend
    npm install
-   cd functions && npm install
-   cd ../frontend && npm install
    ```
 
-2. **Firebase Setup**
-   ```bash
-   firebase login
-   firebase init
-   # Select your Firebase project
+3. **Set up environment variables**
+   Create a `.env.local` file in the frontend directory:
+   ```env
+   NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key_here
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain_here
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id_here
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket_here
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id_here
+   NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id_here
+   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=your_measurement_id_here
    ```
 
-3. **Environment Configuration**
-   - Create `functions/.env` with your email service credentials
-   - Update `frontend/src/firebase/config.ts` with your Firebase config
-
-4. **Deploy Security Rules**
-   ```bash
-   firebase deploy --only firestore:rules,storage
-   ```
-
-5. **Start Development**
+4. **Run the development server**
    ```bash
    npm run dev
    ```
 
-### Production Deployment
+5. **Open your browser**
+   Navigate to `http://localhost:3000`
 
-```bash
-npm run build
-firebase deploy
-```
+## Production Deployment
 
-## 🔐 Security Features
+### Vercel Deployment
 
-- Firebase Auth for staff authentication
-- Firestore security rules preventing unauthorized access
-- Storage rules protecting sensitive attachments
-- Audit logging for compliance
+1. **Connect to Vercel**
+   - Import your GitHub repository to Vercel
+   - Select the `frontend` directory as the root directory
+
+2. **Configure Environment Variables**
+   In your Vercel dashboard, add these environment variables:
+   ```
+   NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyDykPup22rjrnfgDak2diZtI9jBYsISi3w
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=carer-match.firebaseapp.com
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=carer-match
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=carer-match.firebasestorage.app
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=922161902973
+   NEXT_PUBLIC_FIREBASE_APP_ID=1:922161902973:web:aefae248a86fe92348c814
+   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-19236LK34J
+   ```
+
+3. **Deploy**
+   - Vercel will automatically deploy when you push to your main branch
+   - The build command and output directory are pre-configured in `vercel.json`
+
+### Firebase Backend Deployment
+
+1. **Install Firebase CLI**
+   ```bash
+   npm install -g firebase-tools
+   ```
+
+2. **Deploy Firebase Functions**
+   ```bash
+   cd functions
+   firebase deploy --only functions
+   ```
+
+3. **Deploy Firestore Rules**
+   ```bash
+   firebase deploy --only firestore:rules
+   ```
+
+## Environment Variables for Production
+
+When deploying to Vercel, you'll need to set these environment variables in your Vercel dashboard:
+
+| Variable | Value |
+|----------|-------|
+| `NEXT_PUBLIC_FIREBASE_API_KEY` | `AIzaSyDykPup22rjrnfgDak2diZtI9jBYsISi3w` |
+| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` | `carer-match.firebaseapp.com` |
+| `NEXT_PUBLIC_FIREBASE_PROJECT_ID` | `carer-match` |
+| `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` | `carer-match.firebasestorage.app` |
+| `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | `922161902973` |
+| `NEXT_PUBLIC_FIREBASE_APP_ID` | `1:922161902973:web:aefae248a86fe92348c814` |
+| `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID` | `G-19236LK34J` |
+
+## Security Features
+
+- Content Security Policy headers
+- XSS protection
+- Frame options for clickjacking protection
+- HTTPS enforcement
+- Firebase security rules
 - Input validation and sanitization
 
-## 📊 Data Models
+## Project Structure
 
-### Carer Profile
-- Personal information and contact details
-- Age range preferences and capacity
-- Experience with special needs and behavioral issues
-- Location preferences and exclusions
-- Pet and sibling group preferences
+```
+├── frontend/                 # Next.js frontend application
+│   ├── components/          # React components
+│   ├── pages/              # Next.js pages and API routes
+│   ├── lib/                # Utility functions and Firebase config
+│   ├── styles/             # CSS and styling
+│   └── public/             # Static assets
+├── functions/              # Firebase Cloud Functions
+├── firestore.rules         # Firestore security rules
+├── storage.rules          # Firebase Storage rules
+└── scripts/               # Setup and utility scripts
+```
 
-### Referral
-- Child information and needs assessment
-- Placement requirements and preferences
-- Extracted data from IFA forms
-- Matched carers with scoring (only shows carers with score > 0)
-- Assignment tracking and audit trail
+## Contributing
 
-## 🎯 Matching Algorithm
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
-The system uses a weighted scoring algorithm that considers:
-- Age range compatibility (30 points)
-- Sibling group acceptance (20 points)  
-- Special needs experience (15 points)
-- Behavioral support experience (15 points)
-- Location preferences (10 points)
-- Urgency level (10 points)
+## License
 
-**Note**: Only carers with a match score greater than 0 are displayed in the matching results.
+This project is licensed under the MIT License.
 
-## 📝 License
+## Support
 
-MIT License - See LICENSE file for details 
+For support, please open an issue in the GitHub repository or contact the development team. 

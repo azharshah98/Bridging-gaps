@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
+import Image from 'next/image';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -25,29 +26,43 @@ export default function LoginForm() {
     }
   };
 
+  const LogoComponent = () => {
+    if (logoError) {
+      return (
+        <div className="h-32 flex items-center justify-center bg-teal-600 text-white rounded-lg px-8">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold">BGFA</h1>
+            <p className="text-sm text-teal-100">Bridging Gaps</p>
+            <p className="text-sm text-teal-100">Fostering Agency</p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="relative">
+        <Image
+          src="/Logo-Vectorized-Basic.png"
+          alt="Bridging Gaps Fostering Agency"
+          width={400}
+          height={120}
+          className="h-32 w-auto max-w-sm"
+          style={{ height: '128px', width: 'auto' }}
+          priority
+          unoptimized
+          onError={() => setLogoError(true)}
+        />
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           {/* Bridging Gaps Logo */}
           <div className="flex justify-center mb-12 mt-8">
-            {!logoError ? (
-              <img 
-                src="/Logo-Vectorized-Basic.png"
-                alt="Bridging Gaps Fostering Agency" 
-                className="h-32 w-auto max-w-sm"
-                style={{ maxHeight: '128px' }}
-                onError={() => setLogoError(true)}
-              />
-            ) : (
-              <div className="h-32 flex items-center justify-center bg-teal-600 text-white rounded-lg px-8">
-                <div className="text-center">
-                  <h1 className="text-2xl font-bold">BGFA</h1>
-                  <p className="text-sm text-teal-100">Bridging Gaps</p>
-                  <p className="text-sm text-teal-100">Fostering Agency</p>
-                </div>
-              </div>
-            )}
+            <LogoComponent />
           </div>
           
           <h2 className="mt-6 text-center text-2xl font-bold text-gray-900">

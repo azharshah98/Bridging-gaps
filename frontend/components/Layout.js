@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useAuth } from './auth/AuthProvider'
+import Image from 'next/image'
 
 export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -27,22 +28,31 @@ export default function Layout({ children }) {
     }
   }
 
-  const LogoComponent = ({ isMobile = false }) => (
-    <div className="flex items-center">
-      {!logoError ? (
-        <img 
-          src="/Logo-Vectorized-Basic.png"
-          alt="Bridging Gaps Fostering Agency" 
-          className={isMobile ? "h-8 w-auto max-w-48" : "h-12 w-auto max-w-56"}
-          onError={() => setLogoError(true)}
-        />
-      ) : (
+  const LogoComponent = ({ isMobile = false }) => {
+    if (logoError) {
+      return (
         <div className={`${isMobile ? 'h-8 px-3' : 'h-12 px-4'} flex items-center justify-center bg-teal-600 text-white rounded`}>
           <span className={`${isMobile ? 'text-sm' : 'text-lg'} font-bold`}>BGFA</span>
         </div>
-      )}
-    </div>
-  )
+      );
+    }
+
+    return (
+      <div className="flex items-center">
+        <Image
+          src="/Logo-Vectorized-Basic.png"
+          alt="Bridging Gaps Fostering Agency"
+          width={isMobile ? 160 : 200}
+          height={isMobile ? 48 : 60}
+          className={isMobile ? "h-8 w-auto max-w-48" : "h-12 w-auto max-w-56"}
+          style={{ height: isMobile ? '32px' : '48px', width: 'auto' }}
+          priority
+          unoptimized
+          onError={() => setLogoError(true)}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
